@@ -7,14 +7,14 @@ __email__ = "daulet.nurmanbetov@gmail.com"
 import logging
 from langdetect import detect
 from simpletransformers.ner import NERModel
-
+import torch
 
 class RestorePuncts:
-    def __init__(self, wrds_per_pred=250):
+    def __init__(self, wrds_per_pred=250, model_path="felflare/bert-restore-punctuation"):
         self.wrds_per_pred = wrds_per_pred
         self.overlap_wrds = 30
         self.valid_labels = ['OU', 'OO', '.O', '!O', ',O', '.U', '!U', ',U', ':O', ';O', ':U', "'O", '-O', '?O', '?U']
-        self.model = NERModel("bert", "felflare/bert-restore-punctuation", labels=self.valid_labels,
+        self.model = NERModel("bert", "felflare/bert-restore-punctuation", labels=self.valid_labels, use_cuda=torch.cuda.is_available(),
                               args={"silent": True, "max_seq_length": 512})
 
     def punctuate(self, text: str, lang:str=''):
