@@ -10,12 +10,12 @@ from simpletransformers.ner import NERModel
 import torch
 
 class RestorePuncts:
-    def __init__(self, wrds_per_pred=250, model_path="felflare/bert-restore-punctuation"):
+    def __init__(self, wrds_per_pred=250, model_name="felflare/bert-restore-punctuation", cache_dir="../artifacts/felflare/bert-restore-punctuation"):
         self.wrds_per_pred = wrds_per_pred
         self.overlap_wrds = 30
         self.valid_labels = ['OU', 'OO', '.O', '!O', ',O', '.U', '!U', ',U', ':O', ';O', ':U', "'O", '-O', '?O', '?U']
-        self.model = NERModel("bert", model_path, labels=self.valid_labels, use_cuda=torch.cuda.is_available(),
-                              args={"silent": True, "max_seq_length": 512})
+        self.model = NERModel("bert", model_name, labels=self.valid_labels, use_cuda=torch.cuda.is_available(),
+                              args={"silent": True, "max_seq_length": 512}, cache_dir=cache_dir)
 
     def punctuate(self, text: str, lang:str=''):
         """
